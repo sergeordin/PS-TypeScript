@@ -2,10 +2,9 @@
 const URI = 'https://dummyjson.com/users';
 async function getUsers(url) {
     try {
-        const data = await fetch(url)
-            .then((res) => res.json())
-            .then(console.log);
-        return data;
+        const data = await fetch(url);
+        const { users } = await data.json();
+        return users;
     }
     catch (error) {
         console.log(error);

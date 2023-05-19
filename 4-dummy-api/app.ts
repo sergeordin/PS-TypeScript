@@ -1,24 +1,24 @@
 const URI: string = 'https://dummyjson.com/users';
 
-interface IHair {
+interface Hair {
     color: string;
     type: string;
 }
 
-interface ICoordinates {
+interface Coordinates {
     lat: number;
     lng: number;
 }
 
-interface IAddress {
+interface Address {
     address: string;
     city: string;
-    coordinates: ICoordinates;
+    coordinates: Coordinates;
     postalCode: string;
     state: string;
 }
 
-interface IBank {
+interface Bank {
     cardExpire: string;
     cardNumber: string;
     cardType: string;
@@ -26,11 +26,11 @@ interface IBank {
     iban: string;
 }
 
-interface ICompany {
+interface Company {
     address: {
         address: string;
         city?: string;
-        coordinates: ICoordinates;
+        coordinates: Coordinates;
         postalCode: string;
         state: string;
     };
@@ -39,7 +39,7 @@ interface ICompany {
     title: string;
 }
 
-interface IUsers {
+interface Users {
     id: number;
     firstName: string;
     lastName: string;
@@ -56,32 +56,31 @@ interface IUsers {
     height: number;
     weight: number;
     eyeColor: string;
-    hair: IHair;
+    hair: Hair;
     domain: string;
     ip: string;
-    address: IAddress;
+    address: Address;
     macAddress: string;
     university: string;
-    bank: IBank;
-    company: ICompany;
+    bank: Bank;
+    company: Company;
     ein: string;
     ssn: string;
     userAgent: string;
 }
 
-interface IUser {
-    users: IUsers;
+interface UsersJSONResponse {
+    users: Users;
     total: number;
     skip: number;
     limit: number;
 }
 
-async function getUsers(url: string): Promise<void | IUser> {
+async function getUsers(url: string): Promise<void | Users> {
     try {
-        const data = await fetch(url)
-            .then((res) => res.json())
-            .then(console.log);
-        return data;
+        const data = await fetch(url);
+        const { users }: UsersJSONResponse = await data.json();
+        return users;
     } catch (error) {
         console.log(error as Error);
     }
