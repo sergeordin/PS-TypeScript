@@ -1,16 +1,20 @@
 "use strict";
 class MyMap {
-    buckets = [];
-    hash(id) {
-        const r = Math.floor(Math.random() * 10 + 1);
-        return id * r;
-    }
-    set(id, title) {
-        this.buckets.push({
-            id,
-            hash: this.hash(id),
-            title,
-        });
+    buckets = []; // Здесь не понимаю как типизировать
+    //Сет перенес из следующего упражнения, подумал по функционалу он должен подойти сюда
+    set(array, key) {
+        return array.reduce((map, item) => {
+            const itemKey = item[key];
+            let curEl = map[itemKey];
+            if (Array.isArray(curEl)) {
+                curEl.push(item);
+            }
+            else {
+                curEl = [item];
+            }
+            map[itemKey] = curEl;
+            this.buckets = map; // Тоже неверно
+        }, {});
     }
     get(id) {
         return this.buckets.filter((i) => i.id === id);
@@ -23,10 +27,16 @@ class MyMap {
         this.buckets = [];
     }
 }
+const mapData = [
+    { rate: 5, city: 'Moscow', id: 1 },
+    { rate: 5, city: 'Kazan', id: 2 },
+    { rate: 4, city: 'Saint-P', id: 3 },
+    { rate: 4, city: 'NNovgorod', id: 4 },
+    { rate: 3, city: 'Omsk', id: 5 },
+];
 const m = new MyMap();
-for (let i = 1; i <= 10; i++) {
-    m.set(i, `test${i}`);
-}
+m.set(mapData, 'rate');
+//Проверка
 console.log('BUCKETS ', m.buckets);
 console.log('GET ', m.get(2));
 console.log('AFTER GET ', m.buckets);

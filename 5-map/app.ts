@@ -1,23 +1,32 @@
 interface Buckets {
+    rate: number;
+    city: string;
     id: number;
-    hash: number;
-    title: string[] | string;
 }
 
+interface Group<T> {
+    [key: string]: T[];
+}
+
+type key = string | number | symbol;
+
 class MyMap {
-    buckets: Buckets[] = [];
+    buckets = []; // Здесь не понимаю как типизировать
 
-    hash(id: number): number {
-        const r: number = Math.floor(Math.random() * 10 + 1);
-        return id * r;
-    }
+    //Сет перенес из следующего упражнения, подумал по функционалу он должен подойти сюда
 
-    set(id: number, title: string) {
-        this.buckets.push({
-            id,
-            hash: this.hash(id),
-            title,
-        });
+    set<T extends Record<key, any>>(array: T[], key: keyof T): Group<T> {
+        return array.reduce<Group<T>>((map: Group<T>, item) => {
+            const itemKey = item[key];
+            let curEl = map[itemKey];
+            if (Array.isArray(curEl)) {
+                curEl.push(item);
+            } else {
+                curEl = [item];
+            }
+            map[itemKey] = curEl;
+            this.buckets = map; // Тоже неверно
+        }, {});
     }
 
     get(id: number) {
@@ -32,11 +41,18 @@ class MyMap {
     }
 }
 
-const m = new MyMap();
-for (let i = 1; i <= 10; i++) {
-    m.set(i, `test${i}`);
-}
+const mapData: Buckets[] = [
+    { rate: 5, city: 'Moscow', id: 1 },
+    { rate: 5, city: 'Kazan', id: 2 },
+    { rate: 4, city: 'Saint-P', id: 3 },
+    { rate: 4, city: 'NNovgorod', id: 4 },
+    { rate: 3, city: 'Omsk', id: 5 },
+];
 
+const m = new MyMap();
+m.set(mapData, 'rate');
+
+//Проверка
 console.log('BUCKETS ', m.buckets);
 console.log('GET ', m.get(2));
 console.log('AFTER GET ', m.buckets);
