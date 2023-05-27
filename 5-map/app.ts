@@ -13,8 +13,7 @@ type key = string | number | symbol;
 class MyMap {
     buckets = []; // Здесь не понимаю как типизировать
 
-    //Сет перенес из следующего упражнения, подумал по функционалу он должен подойти сюда
-
+    //Сет перенес из следующего упражнения
     set<T extends Record<key, any>>(array: T[], key: keyof T): Group<T> {
         return array.reduce<Group<T>>((map: Group<T>, item) => {
             const itemKey = item[key];
@@ -25,7 +24,7 @@ class MyMap {
                 curEl = [item];
             }
             map[itemKey] = curEl;
-            this.buckets = map; // Тоже неверно
+            this.buckets = map;
         }, {});
     }
 
@@ -51,8 +50,6 @@ const mapData: Buckets[] = [
 
 const m = new MyMap();
 m.set(mapData, 'rate');
-
-//Проверка
 console.log('BUCKETS ', m.buckets);
 console.log('GET ', m.get(2));
 console.log('AFTER GET ', m.buckets);
