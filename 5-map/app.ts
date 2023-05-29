@@ -1,59 +1,55 @@
-interface Buckets {
-    rate: number;
-    city: string;
-    id: number;
-}
-
-interface Group<T> {
-    [key: string]: T[];
-}
-
-type key = string | number | symbol;
+type MapValues = {
+    [hash: string]: Record<string, any>;
+};
 
 class MyMap {
-    buckets = []; // Здесь не понимаю как типизировать
-
-    //Сет перенес из следующего упражнения
-    set<T extends Record<key, any>>(array: T[], key: keyof T): Group<T> {
-        return array.reduce<Group<T>>((map: Group<T>, item) => {
-            const itemKey = item[key];
-            let curEl = map[itemKey];
-            if (Array.isArray(curEl)) {
-                curEl.push(item);
-            } else {
-                curEl = [item];
-            }
-            map[itemKey] = curEl;
-            this.buckets = map;
-        }, {});
+    static getHash(value: string): string {
+        return value.length.toString();
     }
 
-    get(id: number) {
-        return this.buckets.filter((i) => i.id === id);
+    values: MapValues = {};
+
+    set(key: string, value: any): void {
+        const hash = MyMap.getHash(key);
+        if (this.values[hash]) {
+            this.values[hash][key] = value;
+        } else {
+            this.values[hash] = {
+                [key]: value,
+            };
+        }
     }
-    delete(id: number) {
-        this.buckets = this.buckets.filter((i) => i.id !== id);
-        return this.buckets;
+
+    get(key: string): any {
+        const hash = MyMap.getHash(key);
+        return Object.values(this.values[hash]).find((item) =>
+            item.hasOwnProperty(key)
+        );
     }
+
+    delete(key: string): void {
+        const hash = MyMap.getHash(key);
+        if (this.values[hash] && this.values[hash].hasOwnProperty(key)) {
+            delete this.values[hash][key];
+        }
+    }
+
     clear() {
-        this.buckets = [];
+        this.values = {};
     }
 }
 
-const mapData: Buckets[] = [
-    { rate: 5, city: 'Moscow', id: 1 },
-    { rate: 5, city: 'Kazan', id: 2 },
-    { rate: 4, city: 'Saint-P', id: 3 },
-    { rate: 4, city: 'NNovgorod', id: 4 },
-    { rate: 3, city: 'Omsk', id: 5 },
+const mapData = [
+    { rate: 5, city: 'Moscow' },
+    { rate: 5, city: 'Kazan' },
+    { rate: 4, city: 'Saint-P' },
+    { rate: 4, city: 'NNovgorod' },
+    { rate: 3, city: 'Omsk' },
 ];
 
 const m = new MyMap();
-m.set(mapData, 'rate');
-console.log('BUCKETS ', m.buckets);
-console.log('GET ', m.get(2));
-console.log('AFTER GET ', m.buckets);
-m.delete(1);
-console.log('AFTER DELETE ', m.buckets);
-m.clear();
-console.log('AFTER CLEAR ', m.buckets);
+mapData.forEach((item) => {
+    m.set(item.city, item.rate);
+});
+
+console.log(m);
