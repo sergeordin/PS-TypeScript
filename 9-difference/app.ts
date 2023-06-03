@@ -1,22 +1,32 @@
-declare function difference<T, U>(
+function difference<T extends object, U extends keyof T>(
     a: T,
-    b: U
-): Pick<T, Exclude<keyof T, keyof U>>;
+    b: Pick<T, U>
+): Omit<T, U> {
+    const keysToRemove = Object.keys(b) as U[];
+    const filteredKeys = Object.keys(a).filter(
+        (key) => !keysToRemove.includes(key as U)
+    ) as Array<keyof T>;
+    return filteredKeys.reduce((obj, key) => {
+        obj[key] = a[key];
+        return obj;
+    }, {} as Omit<T, U>);
+}
 
-interface IA {
+interface A {
     a: number;
     b: string;
 }
-interface IB {
+interface B {
     a: number;
     c: boolean;
 }
 
-let a: IA = { a: 5, b: '' };
-let b: IB = { a: 10, c: true };
+let a: A = { a: 5, b: '' };
+let b: B = { a: 10, c: true };
 
-interface IDifference {
+interface Difference {
     b: string;
 }
 
-let v0: IDifference = difference(a, b);
+let v0: Difference = difference<A, 'a'>(a, b);
+console.log(v0);
