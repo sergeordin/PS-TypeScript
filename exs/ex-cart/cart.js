@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Product {
     id;
     title;
@@ -64,4 +66,4 @@ cart.setDelivery(new HomeDelivery(new Date(), 'address'));
 console.log(cart);
 console.log(cart.getSum());
 console.log(cart.checkOut());
-export default Cart;
+exports.default = Cart;
