@@ -1,15 +1,15 @@
-function difference<T extends object, U extends keyof T>(
+function difference<T extends object>(
     a: T,
-    b: Pick<T, U>
-): Omit<T, U> {
-    const keysToRemove = Object.keys(b) as U[];
+    b: Partial<T>
+): Omit<T, keyof typeof b> {
+    const keysToRemove = Object.keys(b) as Array<keyof T>;
     const filteredKeys = Object.keys(a).filter(
-        (key) => !keysToRemove.includes(key as U)
+        (key) => !keysToRemove.includes(key)
     ) as Array<keyof T>;
     return filteredKeys.reduce((obj, key) => {
         obj[key] = a[key];
         return obj;
-    }, {} as Omit<T, U>);
+    }, {} as Omit<T, keyof typeof b>);
 }
 
 interface A {
@@ -24,9 +24,7 @@ interface B {
 let a: A = { a: 5, b: '' };
 let b: B = { a: 10, c: true };
 
-interface Difference {
-    b: string;
-}
+type Diff = { b: string };
 
-let v0: Difference = difference<A, 'a'>(a, b);
-console.log(v0);
+let v0: Diff = difference<A, 'a'>(a, b);
+console.log(v0); // { b: '' }

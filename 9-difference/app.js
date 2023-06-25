@@ -10,4 +10,4 @@ function difference(a, b) {
 let a = { a: 5, b: '' };
 let b = { a: 10, c: true };
 let v0 = difference(a, b);
-console.log(v0);
+console.log(v0); // { b: '' }
