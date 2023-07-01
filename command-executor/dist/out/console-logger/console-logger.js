@@ -1,4 +1,5 @@
 export class ConsoleLogger {
+    constructor() { }
     static getInstance() {
         if (!ConsoleLogger.logger) {
             ConsoleLogger.logger = new ConsoleLogger();

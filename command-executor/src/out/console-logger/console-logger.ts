@@ -1,6 +1,8 @@
 import { StreamLogger } from '../../core/handlers/stream-logger.interface';
 
 export class ConsoleLogger implements StreamLogger {
+    private constructor() {}
+
     private static logger: ConsoleLogger;
     public static getInstance() {
         if (!ConsoleLogger.logger) {
