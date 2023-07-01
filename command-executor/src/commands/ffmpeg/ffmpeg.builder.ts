@@ -1,6 +1,5 @@
 export class FfmpegBuilder {
     private inputPath: string;
-
     private options: Map<string, string> = new Map();
 
     constructor() {

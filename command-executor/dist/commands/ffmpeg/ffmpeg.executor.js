@@ -8,11 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { spawn } from 'child_process';
-import { CommandExecutor } from '../../core/executor/command.executor';
-import { FileService } from '../../core/files/file.service';
-import { PromptService } from '../../core/propmt/promt.service';
-import { FfmpegBuilder } from './ffmpeg.builder';
-import { StreamHandler } from '../../core/handlers/stream.handler';
+import { CommandExecutor } from '../../core/executor/command.executor.js';
+import { FileService } from '../../core/files/file.service.js';
+import { PromptService } from '../../core/propmt/promt.service.js';
+import { FfmpegBuilder } from './ffmpeg.builder.js';
+import { StreamHandler } from '../../core/handlers/stream.handler.js';
 export class FfmpegExecutor extends CommandExecutor {
     constructor(logger) {
         super(logger);
