@@ -1,63 +1,105 @@
-interface Iterator<T> {
-    next(): T;
-    hasNext(): boolean;
-}
+class CollectionIterator implements IIterator<Object> {
+    private idx: number = 0;
+    private collection: Object[];
 
-class ObjectIterator implements Iterator<any> {
-    private index: number = 0;
-    private items: any[];
-
-    constructor(items: any[]) {
-        this.items = items;
+    constructor(collection: Object[]) {
+        this.collection = collection;
     }
 
-    public next(): any {
-        return this.items[this.index++];
+    current(): Object | undefined {
+        return this.collection[this.idx];
     }
 
-    public hasNext(): boolean {
-        return this.index < this.items.length;
-    }
-}
+    next(): Object | undefined {
+        this.idx += 1;
 
-class ObjectCollection {
-    private items: any[];
-
-    constructor(items: any[]) {
-        this.items = items;
+        if (this.idx >= this.collection.length) {
+            return undefined;
+        } else {
+            return this.collection[this.idx];
+        }
     }
 
-    public getIterator(): Iterator<any> {
-        return new ObjectIterator(this.items);
+    prev(): Object | undefined {
+        this.idx -= 1;
+
+        if (this.idx < 0) {
+            return undefined;
+        } else {
+            return this.collection[this.idx];
+        }
     }
 
-    public getIteratorById(id: number): Iterator<any> {
-        return new ObjectIterator(this.items.filter((item) => item.id === id));
-    }
-
-    public getIteratorByDate(date: string): Iterator<any> {
-        return new ObjectIterator(
-            this.items.filter((item) => item.date === date)
-        );
+    index(): number {
+        return this.idx;
     }
 }
 
-let collection = new ObjectCollection([
+const collection = [
     { id: 1, date: '01-01-2023', text: 'text 1' },
     { id: 2, date: '02-01-2023', text: 'text 2' },
     { id: 3, date: '03-01-2023', text: 'text 3' },
-]);
+];
 
-// Пример использования итератора по id
-let iteratorById = collection.getIteratorById(1);
-while (iteratorById.hasNext()) {
-    let item = iteratorById.next();
-    console.log(item);
+const iteratorById = new CollectionIterator(collection);
+console.log(iteratorById.current());
+console.log(iteratorById.next());
+console.log(iteratorById.next());
+console.log(iteratorById.prev());
+console.log(iteratorById.index());
+
+// Реализация итератора для поля date
+class DateIterator implements IIterator<Object> {
+    private idx: number = 0;
+    private collection: Object[];
+
+    constructor(collection: Object[]) {
+        this.collection = collection.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+
+            if (dateA > dateB) {
+                return 1;
+            } else if (dateA < dateB) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+    }
+
+    current(): Object | undefined {
+        return this.collection[this.idx];
+    }
+
+    next(): Object | undefined {
+        this.idx += 1;
+
+        if (this.idx >= this.collection.length) {
+            return undefined;
+        } else {
+            return this.collection[this.idx];
+        }
+    }
+
+    prev(): Object | undefined {
+        this.idx -= 1;
+
+        if (this.idx < 0) {
+            return undefined;
+        } else {
+            return this.collection[this.idx];
+        }
+    }
+
+    index(): number {
+        return this.idx;
+    }
 }
 
-// Пример использования итератора по date
-let iteratorByDate = collection.getIteratorByDate('01-01-2023');
-while (iteratorByDate.hasNext()) {
-    let item = iteratorByDate.next();
-    console.log(item);
-}
+const iteratorByDate = new DateIterator(collection);
+console.log(iteratorByDate.current());
+console.log(iteratorByDate.next());
+console.log(iteratorByDate.next());
+console.log(iteratorByDate.prev());
+console.log(iteratorByDate.index());
