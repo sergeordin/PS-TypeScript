@@ -1,4 +1,4 @@
-import sortBy from 'sort-by';
+import sortBy from './app.d';
 
 interface Person {
     name: string;
@@ -16,6 +16,3 @@ people.sort(sortBy('name'));
 
 // Сортировка по возрасту по убыванию
 people.sort(sortBy('-age'));
-
-// Сортировка по имени по возрастанию, затем по возрасту по убыванию
-people.sort(sortBy(['name', '-age']));

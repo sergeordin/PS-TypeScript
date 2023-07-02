@@ -1,7 +1,8 @@
-declare module 'sort-by' {
-    function sortBy<T>(
-        sortKeys: string | ((item: T) => any) | (string | ((item: T) => any))[],
-        desc?: boolean
-    ): (a: T, b: T) => number;
-    export = sortBy;
-}
+declare function sortBy<T>(
+    ...args: ReadonlyArray<string>
+): (a: T, b: T) => number;
+declare function sortBy<T>(
+    ...args: Array<string | ((key: string, value: any) => any)>
+): (a: T, b: T) => number;
+
+export default sortBy;
