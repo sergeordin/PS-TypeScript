@@ -7,7 +7,7 @@ function difference(a, b) {
         return obj;
     }, {});
 }
-let a = { a: 5, b: '' };
-let b = { a: 10, c: true };
-let v0 = difference(a, b);
-console.log(v0); // { b: '' }
+const a = { a: 5, b: '' };
+const b = { a: 10, c: true };
+const diffObj = difference(a, b);
+console.log(diffObj); // { b: '' }

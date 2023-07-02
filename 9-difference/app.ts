@@ -12,19 +12,19 @@ function difference<T extends object>(
     }, {} as Omit<T, keyof typeof b>);
 }
 
-interface A {
+interface firstObj {
     a: number;
     b: string;
 }
-interface B {
+interface secondObj {
     a: number;
     c: boolean;
 }
 
-let a: A = { a: 5, b: '' };
-let b: B = { a: 10, c: true };
+const a: firstObj = { a: 5, b: '' };
+const b: secondObj = { a: 10, c: true };
 
-type Diff = { b: string };
+type Diff = Partial<firstObj>;
 
-let v0: Diff = difference<A, 'a'>(a, b);
-console.log(v0); // { b: '' }
+const diffObj: Diff = difference<Diff>(a, b);
+console.log(diffObj); // { b: '' }
